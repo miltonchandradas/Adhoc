@@ -21,8 +21,8 @@ sap.ui.define([
 			//this._oMultiInput.setTokens(this._getDefaultTokens());
 
 			this.oColModel = new JSONModel(sap.ui.require.toUrl("com/sap/Adhoc/model") + "/columnsModel.json");
-			this.oTodoModel = new JSONModel(sap.ui.require.toUrl("com/sap/Adhoc/model") + "/Todos.json");
-			
+
+			this.oTodoModel = this.getOwnerComponent().getModel();
 			this.getView().setModel(this.oTodoModel);
 		},
 		

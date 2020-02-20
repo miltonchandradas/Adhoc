@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.ui.comp.valuehelpdialog" xmlns:m="sap.m" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
 	<ValueHelpDialog title="New Correspondence" ok=".onValueHelpOkPress" cancel=".onValueHelpCancelPress" afterClose=".onValueHelpAfterClose" supportMultiselect="false"
-		supportRanges="false" key="id" descriptionKey="title" selectionChange=".onValueHelpOkPress">
+		supportRanges="false" key="id" descriptionKey="title">
 		<filterBar>
 			<fb:FilterBar advancedMode="true" search="onFilterBarSearch">
 				<fb:filterGroupItems>
