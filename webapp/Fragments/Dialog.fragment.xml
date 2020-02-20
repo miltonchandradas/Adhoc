@@ -1,17 +1,26 @@
-<core:FragmentDefinition
-	xmlns="sap.m"
-	xmlns:core="sap.ui.core">
-	<SelectDialog
-		title="New Correspondence"
-		class="sapUiPopupWithPadding"
-		items="{/}"
-		search="_handleValueHelpSearch"
-		confirm="_handleValueHelpClose"
-		cancel="_handleValueHelpClose">
-		<StandardListItem
-			iconDensityAware="false"
-			iconInset="false"
-			title="{title}"
-			description="Completed: {completed}" />
-	</SelectDialog>
+<core:FragmentDefinition xmlns="sap.ui.comp.valuehelpdialog" xmlns:m="sap.m" xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core">
+	<ValueHelpDialog title="New Correspondence" ok=".onValueHelpOkPress" cancel=".onValueHelpCancelPress" afterClose=".onValueHelpAfterClose" supportMultiselect="false"
+		supportRanges="false" key="id" descriptionKey="title" selectionChange=".onValueHelpOkPress">
+		<filterBar>
+			<fb:FilterBar advancedMode="true" search="onFilterBarSearch">
+				<fb:filterGroupItems>
+					<!--<fb:FilterGroupItem groupName="__$INTERNAL$" name="id" label="Id" visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="id"/>
+						</fb:control>
+					</fb:FilterGroupItem>-->
+					<fb:FilterGroupItem groupName="__$INTERNAL$" name="title" label="Title" visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="title"/>
+						</fb:control>
+					</fb:FilterGroupItem>
+					<fb:FilterGroupItem groupName="__$INTERNAL$" name="completed" label="Completed" visibleInFilterBar="true">
+						<fb:control>
+							<m:Input name="completed"/>
+						</fb:control>
+					</fb:FilterGroupItem>
+				</fb:filterGroupItems>
+			</fb:FilterBar>
+		</filterBar>
+	</ValueHelpDialog>
 </core:FragmentDefinition>

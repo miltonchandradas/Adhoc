@@ -4,20 +4,32 @@ sap.ui.define([
 	'sap/ui/model/Filter',
 	'sap/ui/model/json/JSONModel',
 	'sap/m/Token',
-	'sap/ui/model/FilterOperator'
-], function (Controller, Fragment, Filter, JSONModel, Token, FilterOperator) {
+	'sap/ui/model/FilterOperator',
+	'sap/ui/model/type/String',
+	'sap/m/ColumnListItem',
+	'sap/m/Label',
+	'sap/m/SearchField',
+	'sap/ui/comp/library'
+], function (Controller, Fragment, Filter, JSONModel, Token, FilterOperator, typeString, ColumnListItem, Label, SearchField, compLibrary) {
 	"use strict";
 	
 
 	return Controller.extend("com.sap.Adhoc.controller.App", {
 		onInit: function () {
 
+			this._oMultiInput = this.getView().byId("newCorrespondence");
+			//this._oMultiInput.setTokens(this._getDefaultTokens());
+
+			this.oColModel = new JSONModel(sap.ui.require.toUrl("com/sap/Adhoc/model") + "/columnsModel.json");
+			this.oTodoModel = new JSONModel(sap.ui.require.toUrl("com/sap/Adhoc/model") + "/Todos.json");
+			
+			this.getView().setModel(this.oTodoModel);
 		},
 		
 		onSelectionChange: function (e) {
-			var params = e.getParameters();
-			var changedItem = params.changedItem;
-			alert (`Selected item: key - ${changedItem.getKey()}, text - ${changedItem.getText()}, isSelected - ${params.selected}`);
+			/*var params = e.getParameters();
+			var changedItem = params.changedItem;*/
+			//alert (`Selected item: key - ${changedItem.getKey()}, text - ${changedItem.getText()}, isSelected - ${params.selected}`);
 			
 			
 		},
@@ -26,93 +38,103 @@ sap.ui.define([
 		/*********************************************************************************************/
 		
 		handleValueHelp : function (oController) {
-			this.inputId = oController.oSource.sId;
-			// create value help dialog
-			if (!this._valueHelpDialog) {
-				this._valueHelpDialog = sap.ui.xmlfragment(
-					"com.sap.Adhoc.Fragments.Dialog",
-					this
-				);
-				this.getView().addDependent(this._valueHelpDialog);
-			}
+			var aCols = this.oColModel.getData().cols;
+			this._oBasicSearchField = new SearchField({
+				showSearchButton: false
+			});
 
-			// open value help dialog
-			this._valueHelpDialog.open();
+			this._oValueHelpDialog = sap.ui.xmlfragment("com.sap.Adhoc.Fragments.Dialog", this);
+			this.getView().addDependent(this._oValueHelpDialog);
+
+			this._oValueHelpDialog.getFilterBar().setBasicSearch(this._oBasicSearchField);
+
+			this._oValueHelpDialog.getTableAsync().then(function (oTable) {
+				oTable.setModel(this.oTodoModel);
+				oTable.setModel(this.oColModel, "columns");
+
+				if (oTable.bindRows) {
+					oTable.bindAggregation("rows", "/");
+				}
+
+				if (oTable.bindItems) {
+					oTable.bindAggregation("items", "/", function () {
+						return new ColumnListItem({
+							cells: aCols.map(function (column) {
+								return new Label({ text: "{" + column.template + "}" });
+							})
+						});
+					});
+				}
+
+				this._oValueHelpDialog.update();
+			}.bind(this));
+
+			var oToken = new Token();
+			oToken.setKey(this._oMultiInput.getSelectedKey());
+			oToken.setText(this._oMultiInput.getValue());
+			this._oValueHelpDialog.setTokens([oToken]);
+			
+			this._oValueHelpDialog.open();
+			
 		},
 
-		_handleValueHelpSearch : function (evt) {
-			var sValue = evt.getParameter("value");
-			var oFilter = new Filter(
-				"title",
-				sap.ui.model.FilterOperator.Contains, sValue
-			);
-			evt.getSource().getBinding("items").filter([oFilter]);
+		onValueHelpOkPress: function (oEvent) {
+			var aTokens = oEvent.getParameter("tokens");
+			this._oMultiInput.setSelectedKey(aTokens[0].getKey());
+			this._oValueHelpDialog.close();
 		},
 
-		_handleValueHelpClose : function (evt) {
-			var oSelectedItem = evt.getParameter("selectedItem");
-			if (oSelectedItem) {
-				var productInput = this.byId(this.inputId);
-				productInput.setValue(oSelectedItem.getTitle());
-			}
-			evt.getSource().getBinding("items").filter([]);
-		},
-		
-		
-		/*********************************************************************************************/
-		
-		handleMultiValueHelp: function (oEvent) {
-			var sInputValue = oEvent.getSource().getValue();
-
-			// create value help dialog
-			if (!this._multiValueHelpDialog) {
-				Fragment.load({
-					id: "valueHelpDialog",
-					name: "com.sap.Adhoc.Fragments.MultiDialog",
-					controller: this
-				}).then(function (oValueHelpDialog) {
-					this._multiValueHelpDialog = oValueHelpDialog;
-					this.getView().addDependent(this._multiValueHelpDialog);
-					this._openValueHelpDialog(sInputValue);
-				}.bind(this));
-			} else {
-				this._openValueHelpDialog(sInputValue);
-			}
+		onValueHelpCancelPress: function () {
+			this._oValueHelpDialog.close();
 		},
 
-		_openValueHelpDialog: function (sInputValue) {
-			// create a filter for the binding
-			this._multiValueHelpDialog.getBinding("items").filter([new Filter(
-				"title",
-				FilterOperator.Contains,
-				sInputValue
-			)]);
-
-			// open value help dialog filtered by the input value
-			this._multiValueHelpDialog.open(sInputValue);
+		onValueHelpAfterClose: function () {
+			this._oValueHelpDialog.destroy();
 		},
 
-		_handleMultiValueHelpSearch: function (evt) {
-			var sValue = evt.getParameter("value");
-			var oFilter = new Filter(
-				"title",
-				FilterOperator.Contains,
-				sValue
-			);
-			evt.getSource().getBinding("items").filter([oFilter]);
-		},
-
-		_handleMultiValueHelpClose: function (evt) {
-			var aSelectedItems = evt.getParameter("selectedItems"),
-				oMultiInput = this.byId("multiInput");
-
-			if (aSelectedItems && aSelectedItems.length > 0) {
-				aSelectedItems.forEach(function (oItem) {
-					oMultiInput.addToken(new Token({
-						text: oItem.getTitle()
+		onFilterBarSearch: function (oEvent) {
+			var sSearchQuery = this._oBasicSearchField.getValue(),
+				aSelectionSet = oEvent.getParameter("selectionSet");
+			var aFilters = aSelectionSet.reduce(function (aResult, oControl) {
+				if (oControl.getValue()) {
+					aResult.push(new Filter({
+						path: oControl.getName(),
+						operator: FilterOperator.Contains,
+						value1: oControl.getValue()
 					}));
-				});
-			}
+				}
+
+				return aResult;
+			}, []);
+
+			aFilters.push(new Filter({
+				filters: [
+					new Filter({ path: "title", operator: FilterOperator.Contains, value1: sSearchQuery }),
+					new Filter({ path: "completed", operator: FilterOperator.Contains, value1: sSearchQuery })
+				],
+				and: false
+			}));
+
+			this._filterTable(new Filter({
+				filters: aFilters,
+				and: true
+			}));
+		},
+
+		_filterTable: function (oFilter) {
+			var oValueHelpDialog = this._oValueHelpDialog;
+
+			oValueHelpDialog.getTableAsync().then(function (oTable) {
+				if (oTable.bindRows) {
+					oTable.getBinding("rows").filter(oFilter);
+				}
+
+				if (oTable.bindItems) {
+					oTable.getBinding("items").filter(oFilter);
+				}
+
+				oValueHelpDialog.update();
+			});
 		}
 	});
 });

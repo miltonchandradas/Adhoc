@@ -42,45 +42,13 @@
 						<f:SimpleForm editable="true" class="sapUiTinyMargin" id="form2" layout="ResponsiveGridLayout">
 							<f:content>
 								<core:Title text="Correspondence"/>
-								<!--<Label text="Send New Correspondence"/>
-								<ComboBox id="combobox2" selectedItem="item6">
-									<items>
-										<core:Item key="item6" text="VERIFICATION OF SERVICE - PAPER" id="item6"/>
-										<core:Item key="item7" text="VERIFICATION OF SERVICE - EMAIL" id="item7"/>
-										<core:Item key="item8" text="MEDICAL BASELINE APPLICATION FORM" id="item8"/>
-										<core:Item key="item9" text="SOME DESCRIPTION" id="item9"/>
-									</items>
-								</ComboBox>-->
 								<Label text="Send New Correspondence" labelFor="newCorrespondence"/>
-								<!--<Input id="newCorrespondence" type="Text" textFormatMode="ValueKey" placeholder="Enter Correspondence ..." showSuggestion="true"
-									showTableSuggestionValueHelp="true" suggestionRows="{/}" suggestionItemSelected="suggestionItemSelected" showValueHelp="true"
-									valueHelpRequest="handleValueHelp" valueHelpOnly="true">
-									<suggestionColumns>
-										<Column hAlign="Begin" popinDisplay="Inline" demandPopin="true">
-											<Label text="Title"/>
-										</Column>
-										<Column hAlign="Center" popinDisplay="Inline" demandPopin="true" minScreenWidth="Tablet">
-											<Label text="ID"/>
-										</Column>
-										<Column hAlign="Center" popinDisplay="Inline" demandPopin="false" minScreenWidth="Tablet">
-											<Label text="Completed"/>
-										</Column>
-									</suggestionColumns>
-									<suggestionRows>
-										<ColumnListItem>
-											<cells>
-												<Label text="{title}"/>
-												<Label text="{id}"/>
-												<Label text="{completed}"/>
-											</cells>
-										</ColumnListItem>
-									</suggestionRows>
-								</Input>-->
-								<Input id="input1" valueHelpOnly="true" valueHelpRequest="handleValueHelp"></Input>
-								
-								
-								<Label text="Cancel Pending Correspondence"/>
-								<MultiComboBox showSecondaryValues="true" items="{ path: '/', sorter: { path: 'title' }, filter: {} }">
+								<Input id="newCorrespondence" suggestionItems="{ path: '/', sorter: { path: 'title' } }" showValueHelp="true"
+									valueHelpOnly="true" placeholder="Select New Correspondence ..." valueHelpRequest=".handleValueHelp">
+									<core:Item key="{id}" text="{title}"/>
+								</Input>
+								<Label text="Cancel Pending Correspondence" labelFor="cancelCorrespondence"/>
+								<MultiComboBox showSecondaryValues="true" items="{ path: '/', sorter: { path: 'title' } }">
 									<core:ListItem key="{id}" text="{title}" additionalText="{id}"/>
 								</MultiComboBox>
 							</f:content>

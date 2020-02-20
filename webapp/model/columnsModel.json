@@ -1,0 +1,17 @@
+{
+	"cols": [
+		{
+			"label": "Id",
+			"template": "id",
+			"width": "5rem"
+		},
+		{
+			"label": "Title",
+			"template": "title"
+		},
+		{
+			"label": "Completed",
+			"template": "completed"
+		}
+	]
+}
