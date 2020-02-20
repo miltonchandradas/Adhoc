@@ -1,0 +1,104 @@
+<mvc:View controllerName="com.sap.Adhoc.controller.App" xmlns:mvc="sap.ui.core.mvc" displayBlock="true" xmlns="sap.m"
+	xmlns:semantic="sap.m.semantic" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<Shell id="shell">
+		<App id="app">
+			<pages>
+				<Page id="page" title="Ad Hoc Customer Correspondence">
+					<content>
+						<f:SimpleForm editable="true" class="sapUiTinyMargin" id="form1" columnsL="2" columnsM="2" layout="ResponsiveGridLayout">
+							<f:content>
+								<core:Title text="Customer Information"/>
+								<Label text="Service Address"/>
+								<ComboBox id="combobox1" selectedItem="item0">
+									<items>
+										<core:Item key="item0" text="4321 Main St, Las Vegas, NV 89010" id="item0"/>
+										<core:Item key="item1" text="4322 Main St, Las Vegas, NV 89010" id="item1"/>
+										<core:Item key="item2" text="4323 Main St, Los Angeles, CA 90210" id="item2"/>
+										<core:Item key="item3" text="4324 Main St, Las Vegas, NV 89010" id="item3"/>
+										<core:Item key="item4" text="4325 Main St, Las Vegas, NV 89010" id="item4"/>
+										<core:Item key="item5" text="4326 Main St, Las Vegas, NV 89010" id="item5"/>
+									</items>
+								</ComboBox>
+								<Label text="Contract Account"/>
+								<Text text="123456"/>
+								<Label text="Mailing Address"/>
+								<Text text="4321 Main St, Las Vegas, NV 89010"/>
+								<Label text="Email Address"/>
+								<Text text="xxxxxxxxxxx@xxxxxxxxx.com"/>
+								<core:Title text=""/>
+								<Label text="Name"/>
+								<Text text="Lareretta Matthews-Johnson"/>
+								<Label text="Business Partner"/>
+								<Text text="9876543"/>
+								<Label text="Relationship Type"/>
+								<Text text="Has the Co-Applicant Of"/>
+								<Label text="Name"/>
+								<Text text="Dwayne Johnson"/>
+								<Label text="Business Partner"/>
+								<Text text="9876543"/>
+							</f:content>
+						</f:SimpleForm>
+						<Toolbar width="100%" height="1px"/>
+						<f:SimpleForm editable="true" class="sapUiTinyMargin" id="form2" layout="ResponsiveGridLayout">
+							<f:content>
+								<core:Title text="Correspondence"/>
+								<!--<Label text="Send New Correspondence"/>
+								<ComboBox id="combobox2" selectedItem="item6">
+									<items>
+										<core:Item key="item6" text="VERIFICATION OF SERVICE - PAPER" id="item6"/>
+										<core:Item key="item7" text="VERIFICATION OF SERVICE - EMAIL" id="item7"/>
+										<core:Item key="item8" text="MEDICAL BASELINE APPLICATION FORM" id="item8"/>
+										<core:Item key="item9" text="SOME DESCRIPTION" id="item9"/>
+									</items>
+								</ComboBox>-->
+								<Label text="Send New Correspondence" labelFor="newCorrespondence"/>
+								<!--<Input id="newCorrespondence" type="Text" textFormatMode="ValueKey" placeholder="Enter Correspondence ..." showSuggestion="true"
+									showTableSuggestionValueHelp="true" suggestionRows="{/}" suggestionItemSelected="suggestionItemSelected" showValueHelp="true"
+									valueHelpRequest="handleValueHelp" valueHelpOnly="true">
+									<suggestionColumns>
+										<Column hAlign="Begin" popinDisplay="Inline" demandPopin="true">
+											<Label text="Title"/>
+										</Column>
+										<Column hAlign="Center" popinDisplay="Inline" demandPopin="true" minScreenWidth="Tablet">
+											<Label text="ID"/>
+										</Column>
+										<Column hAlign="Center" popinDisplay="Inline" demandPopin="false" minScreenWidth="Tablet">
+											<Label text="Completed"/>
+										</Column>
+									</suggestionColumns>
+									<suggestionRows>
+										<ColumnListItem>
+											<cells>
+												<Label text="{title}"/>
+												<Label text="{id}"/>
+												<Label text="{completed}"/>
+											</cells>
+										</ColumnListItem>
+									</suggestionRows>
+								</Input>-->
+								<Input id="input1" valueHelpOnly="true" valueHelpRequest="handleValueHelp"></Input>
+								
+								
+								<Label text="Cancel Pending Correspondence"/>
+								<MultiComboBox showSecondaryValues="true" items="{ path: '/', sorter: { path: 'title' }, filter: {} }">
+									<core:ListItem key="{id}" text="{title}" additionalText="{id}"/>
+								</MultiComboBox>
+							</f:content>
+						</f:SimpleForm>
+					</content>
+					<footer>
+						<OverflowToolbar id="otbFooter">
+							<ToolbarSpacer/>
+							<Button type="Accept" text="Save and Send" icon="sap-icon://save">
+								<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+							</Button>
+							<Button type="Reject" text="Cancel" icon="sap-icon://cancel">
+								<layoutData><OverflowToolbarLayoutData priority="NeverOverflow"/></layoutData>
+							</Button>
+						</OverflowToolbar>
+					</footer>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
+</mvc:View>
