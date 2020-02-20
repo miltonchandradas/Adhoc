@@ -7,6 +7,7 @@ sap.ui.define([
 	'sap/ui/model/FilterOperator'
 ], function (Controller, Fragment, Filter, JSONModel, Token, FilterOperator) {
 	"use strict";
+	
 
 	return Controller.extend("com.sap.Adhoc.controller.App", {
 		onInit: function () {
