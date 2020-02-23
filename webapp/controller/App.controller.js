@@ -37,6 +37,21 @@ sap.ui.define([
 		
 		/*********************************************************************************************/
 		
+		handleChange: function (oEvent) {
+			var oValidatedComboBox = oEvent.getSource(),
+				sSelectedKey = oValidatedComboBox.getSelectedKey(),
+				sValue = oValidatedComboBox.getValue();
+
+			if (!sSelectedKey && sValue) {
+				oValidatedComboBox.setValueState("Error");
+				oValidatedComboBox.setValueStateText("Please enter a valid correspondence method...");
+			} else {
+				oValidatedComboBox.setValueState("None");
+			}
+		},
+		
+		/*********************************************************************************************/
+		
 		handleValueHelp : function (oController) {
 			var aCols = this.oColModel.getData().cols;
 			this._oBasicSearchField = new SearchField({

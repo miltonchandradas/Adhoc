@@ -42,9 +42,13 @@
 						<f:SimpleForm editable="true" class="sapUiTinyMargin" id="form2" layout="ResponsiveGridLayout">
 							<f:content>
 								<core:Title text="Correspondence"/>
-								<Label text="Send New Correspondence" labelFor="newCorrespondence"/>
-								<Input id="newCorrespondence" suggestionItems="{ path: '/', sorter: { path: 'title' } }" showValueHelp="true"
-									valueHelpOnly="true" placeholder="Select New Correspondence ..." valueHelpRequest=".handleValueHelp">
+								<Label text="Send New Correspondence (Use for 13 to 200 entries)" labelFor="newCorrespondence1"/>
+								<ComboBox change="handleChange" items="{ path: '/', sorter: { path: 'title' } }">
+									<core:Item key="{id}" text="{title}"/>
+								</ComboBox>
+								<Label text="Send New Correspondence (Use for more than 200 entries)" labelFor="newCorrespondence"/>
+								<Input id="newCorrespondence" suggestionItems="{ path: '/', sorter: { path: 'title' } }" showValueHelp="true" valueHelpOnly="true"
+									placeholder="Select New Correspondence ..." valueHelpRequest=".handleValueHelp">
 									<core:Item key="{id}" text="{title}"/>
 								</Input>
 								<Label text="Cancel Pending Correspondence" labelFor="cancelCorrespondence"/>
